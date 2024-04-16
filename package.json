@@ -1,0 +1,31 @@
+{
+  "name": "node_express_mongo",
+  "version": "1.0.0",
+  "description": "A project to learn about using MongoDB in a node + express environment",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server",
+    "dev": "nodemon server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CedricTheveneau/node_express_mongo.git"
+  },
+  "author": "Cedric THEVENEAU",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CedricTheveneau/node_express_mongo/issues"
+  },
+  "homepage": "https://github.com/CedricTheveneau/node_express_mongo#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "helmet": "^7.1.0",
+    "mongoose": "^8.3.1",
+    "nodemon": "^3.1.0",
+    "swagger-ui-express": "^5.0.0",
+    "yaml": "^2.4.1"
+  }
+}
