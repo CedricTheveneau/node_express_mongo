@@ -6,7 +6,7 @@ const accountLineSchema = new mongoose.Schema({
   amount: { type: Number },
   date: { type: Date },
   method: { type: String },
-  status: { type: String },
+  status: { type: Boolean },
   category: { type: String },
   lastUpdate: { type: Date },
 });
