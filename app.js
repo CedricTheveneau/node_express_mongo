@@ -1,15 +1,9 @@
 const express = require("express");
-const app = express();
-const router = require("./app/routes/index.js");
-const mongoose = require("mongoose");
-app.use(express.json());
+require("./app/models/index.js");
 
-mongoose
-  .connect(process.env.DB_URI, { ssl: true })
-  .then(() => console.log("MongoDB connected !"))
-  .catch(() => console.log("Erreur with MongoDB connection"));
+const app = express();
 
 //Ajout des routes
-app.use("/api", router);
+//? app.use("/api", router);
 
 module.exports = app;
