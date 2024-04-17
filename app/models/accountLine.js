@@ -8,7 +8,8 @@ const accountLineSchema = new mongoose.Schema({
   method: { type: String },
   status: { type: Boolean },
   category: { type: String },
-  lastUpdate: { type: Date },
+  lastUpdated: { type: Date },
+  account: { type: String },
 });
 
 const AccountLine = mongoose.model("AccountLine", accountLineSchema);
