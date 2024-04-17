@@ -6,6 +6,7 @@ const categorySchema = new mongoose.Schema({
     type: String,
     required: [true, "The name field is required"],
     unique: [true, "The name field must be unique"],
+    trim: true,
     minlength: [5, "The category name must be at least 5 characters long"],
   },
 });
