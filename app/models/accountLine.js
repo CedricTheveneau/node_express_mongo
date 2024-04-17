@@ -11,6 +11,6 @@ const accountLineSchema = new mongoose.Schema({
   lastUpdate: { type: Date },
 });
 
-const AccountLine = mongoose.model(AccountLine, accountLineSchema);
+const AccountLine = mongoose.model("AccountLine", accountLineSchema);
 
 module.exports = AccountLine;
