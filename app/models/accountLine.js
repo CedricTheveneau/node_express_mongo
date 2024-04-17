@@ -2,11 +2,11 @@ const mongoose = require("mongoose");
 
 const accountLineSchema = new mongoose.Schema({
   label: { type: String },
-  action: { type: Enumerator },
+  action: { type: String },
   amount: { type: Number },
   date: { type: Date },
-  method: { type: Enumerator },
-  status: { type: Enumerator },
+  method: { type: String },
+  status: { type: String },
   category: { type: String },
   lastUpdate: { type: Date },
 });
