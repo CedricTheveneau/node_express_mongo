@@ -1,12 +1,12 @@
-exports.fetch = (req, res) => {
+exports.readAll = (req, res) => {
   res.send("You're on AccountLine fetch");
 };
-exports.new = (req, res) => {
-  res.send("You're on AccountLine");
+exports.create = (req, res) => {
+  res.send("You're on AccountLine new");
 };
 exports.delete = (req, res) => {
-  res.send("You're on AccountLine");
+  res.send("You're on AccountLine delete");
 };
 exports.update = (req, res) => {
-  res.send("You're on AccountLine");
+  res.send("You're on AccountLine update");
 };

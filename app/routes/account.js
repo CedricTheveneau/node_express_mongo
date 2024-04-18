@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express();
 const auth = require("../middlewares/auth.js");
-const account = require("../controllers/account.js");
+const accountCtrl = require("../controllers/account.js");
 
-router.get("/", auth, account.fetch);
-router.post("/", auth, account.new);
-router.delete("/:id", auth, account.delete);
-router.put("/:id", auth, account.update);
+router.get("/", auth, accountCtrl.readAll);
+router.post("/", auth, accountCtrl.create);
+router.delete("/:id", auth, accountCtrl.delete);
+router.put("/:id", auth, accountCtrl.update);
 
 module.exports = router;
