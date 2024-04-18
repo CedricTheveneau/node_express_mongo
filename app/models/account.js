@@ -12,12 +12,29 @@ const accountSchema = new mongoose.Schema({
     trim: true,
     maxlength: [50, "The account name must be at most 50 characters long"],
   },
-  lastUpdated: { type: Date, required: [true, "The date is required"] },
+  lastUpdated: { type: Date },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: [true, "The user field is required"],
   },
+});
+
+accountSchema.pre("save", function (next) {
+  this.lastUpdated = Date.now();
+  next();
+});
+
+accountSchema.pre("findOneAndUpdate", function (next) {
+  this.set({ lastUpdated: Date.now() });
+  next();
+});
+
+accountSchema.pre("findOneAndDelete", async function (next) {
+  await AccountLine.deleteMany({
+    accountId: this._conditions._id,
+  });
+  next();
 });
 
 const Account = mongoose.model("Account", accountSchema);
