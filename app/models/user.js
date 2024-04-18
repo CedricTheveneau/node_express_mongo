@@ -6,6 +6,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "The email field is required"],
     unique: [true, "The email must be unique"],
+    trim: true,
+    lowercase: true,
     validate: {
       validator: function (email) {
         const regex = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;

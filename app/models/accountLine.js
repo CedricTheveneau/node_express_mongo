@@ -6,6 +6,7 @@ const accountLineSchema = new mongoose.Schema({
     required: [true, "The label field is required"],
     maxlength: [50, "The label must be at most 50 characters long"],
     minlength: [2, "The category name must be at least 2 characters long"],
+    trim: true,
   },
   action: {
     type: String,
@@ -18,25 +19,30 @@ const accountLineSchema = new mongoose.Schema({
   amount: {
     type: Number,
     required: [true, "The amount field is required"],
-    min: [1, "The amount must be at least 1€"],
+    validate: {
+      validator: function (amount) {
+        return amount > 0;
+      },
+      message: "Amount must be more than 0",
+    },
   },
   date: { type: Date, required: [true, "The date field is required"] },
   method: {
     type: String,
     required: [true, "The method field is required"],
     enum: {
-      value: ["Chèque", "Retrait", "CB", "Virement"],
+      value: ["Cash", "Direct Deposit", "Credit Card", "Bank Transfer"],
       message: "{VALUE} is not an available option",
     },
   },
   status: { type: Boolean, default: false },
-  category: {
+  categoryId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
     required: [true, "The category field is required"],
   },
   lastUpdated: { type: Date, required: [true, "The date field is required"] },
-  account: {
+  accountId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Account",
     required: [true, "The account field is required"],
