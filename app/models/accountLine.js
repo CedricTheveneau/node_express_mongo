@@ -12,7 +12,7 @@ const accountLineSchema = new mongoose.Schema({
     type: String,
     required: [true, "The action field is required"],
     enum: {
-      value: ["Crédit", "Débit"],
+      values: ["Crédit", "Débit"],
       message: "{VALUE} is not an available option",
     },
   },
@@ -31,7 +31,7 @@ const accountLineSchema = new mongoose.Schema({
     type: String,
     required: [true, "The method field is required"],
     enum: {
-      value: ["Cash", "Direct Deposit", "Credit Card", "Bank Transfer"],
+      values: ["Cash", "Direct Deposit", "Credit Card", "Bank Transfer"],
       message: "{VALUE} is not an available option",
     },
   },

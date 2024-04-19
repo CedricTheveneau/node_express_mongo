@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const AccountLine = require("../models/accountLine");
 
 const accountSchema = new mongoose.Schema({
   bank: {
@@ -31,10 +32,14 @@ accountSchema.pre("findOneAndUpdate", function (next) {
 });
 
 accountSchema.pre("findOneAndDelete", async function (next) {
-  await AccountLine.deleteMany({
-    accountId: this._conditions._id,
-  });
-  next();
+  try {
+    await AccountLine.deleteMany({
+      accountId: this.getQuery().id,
+    });
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
 const Account = mongoose.model("Account", accountSchema);

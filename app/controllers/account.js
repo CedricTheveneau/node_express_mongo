@@ -35,7 +35,7 @@ exports.create = async (req, res) => {
 exports.delete = async (req, res) => {
   try {
     const account = await Account.findOneAndDelete({
-      id: req.params.id,
+      _id: req.params.id,
       userId: req.auth.userId,
     });
     if (!account) {
