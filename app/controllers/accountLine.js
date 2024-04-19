@@ -1,11 +1,56 @@
 const AccountLine = require("../models/accountLine");
+const Account = require("../models/account");
+const mongoose = require("mongoose");
+
+const getLines = async (match, userId) => {
+  const lines = await AccountLine.aggregate([
+    {
+      $match: match,
+    },
+    {
+      $lookup: {
+        from: "accounts",
+        localField: "accountId",
+        foreignField: "_id",
+        as: "accountInfo",
+      },
+    },
+    {
+      $unwind: "$accountInfo",
+    },
+    {
+      $match: {
+        "accountInfo.userId":
+          mongoose.Types.ObjectId.createFromHexString(userId),
+      },
+    },
+    {
+      $project: {
+        accountInfo: 0,
+      },
+    },
+  ]);
+  if (!lines || lines.length === 0) {
+    return false;
+  }
+  return lines;
+};
 
 exports.readByAccount = async (req, res) => {
   try {
-    let lines = await AccountLine.find({
-      // userId: req.auth.userId,
-      accountId: req.params.accountId,
-    });
+    const lines = await getLines(
+      {
+        accountId: mongoose.Types.ObjectId.createFromHexString(
+          req.params.accountId
+        ),
+      },
+      req.auth.userId
+    );
+    if (!lines) {
+      return res.status(404).json({
+        message: "Didn't find the account line you were looking for.",
+      });
+    }
     res.status(200).json(lines);
   } catch (err) {
     res.status(500).json({
@@ -17,6 +62,13 @@ exports.readByAccount = async (req, res) => {
 };
 exports.create = async (req, res) => {
   try {
+    const account = Account.findOne({
+      _id: req.params.accountId,
+      userId: req.auth.userId,
+    });
+    if (!account) {
+      return res.status(404).json({ message: "Account not found." });
+    }
     const { label, action, amount, date, method, categoryId } = req.body;
     const accountLine = new AccountLine({
       label,
@@ -39,14 +91,20 @@ exports.create = async (req, res) => {
 };
 exports.delete = async (req, res) => {
   try {
-    const accountLines = await AccountLine.findOneAndDelete({
-      _id: req.params.id,
-    });
+    const accountLines = await getLines(
+      {
+        _id: mongoose.Types.ObjectId.createFromHexString(req.params.id),
+      },
+      req.auth.userId
+    );
     if (!accountLines) {
-      res.status(404).json({
+      return res.status(404).json({
         message: "Didn't find the account line you were looking for.",
       });
     }
+    await AccountLine.findOneAndDelete({
+      _id: req.params.id,
+    });
     res.status(204).send();
   } catch (err) {
     res.status(500).json({
@@ -58,8 +116,19 @@ exports.delete = async (req, res) => {
 };
 exports.update = async (req, res) => {
   try {
+    const accountLines = await getLines(
+      {
+        _id: mongoose.Types.ObjectId.createFromHexString(req.params.id),
+      },
+      req.auth.userId
+    );
+    if (!accountLines) {
+      return res.status(404).json({
+        message: "Didn't find the account line you were looking for.",
+      });
+    }
     const { label, action, amount, date, method, categoryId } = req.body;
-    const accountLine = await AccountLine.findOneAndUpdate(
+    await AccountLine.findOneAndUpdate(
       {
         _id: req.params.id,
       },
@@ -73,12 +142,7 @@ exports.update = async (req, res) => {
       },
       { returnDocument: "after" }
     );
-    if (!accountLine) {
-      return res.status(404).json({
-        message: "Didn't find the account line you were looking for.",
-      });
-    }
-    res.status(200).json(accountLine);
+    res.status(200).json(accountLines);
   } catch (err) {
     res.status(500).json({
       message:
