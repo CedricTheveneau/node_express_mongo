@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express();
 const auth = require("../middlewares/auth.js");
-const accountLine = require("../controllers/accountLine.js");
+const accountLineCtrl = require("../controllers/accountLine.js");
 
-router.get("/", auth, accountLine.fetch);
-router.post("/", auth, accountLine.new);
-router.delete("/:id", auth, accountLine.delete);
-router.put("/:id", auth, accountLine.update);
+router.get("/:accountId", auth, accountLineCtrl.readByAccount);
+router.post("/:accountId", auth, accountLineCtrl.create);
+router.delete("/:id", auth, accountLineCtrl.delete);
+router.put("/:id", auth, accountLineCtrl.update);
 
 module.exports = router;

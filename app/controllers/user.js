@@ -11,7 +11,7 @@ exports.signup = async (req, res) => {
       password: hashedPassword,
     });
     await user.save();
-    await res.status(201).json(user);
+    res.status(201).json(user);
   } catch (err) {
     res.status(500).json({
       message:
@@ -32,7 +32,7 @@ exports.login = async (req, res) => {
     if (!matchingPassword) {
       return res.status(401).json({ message: "Invalid password" });
     }
-    const token = jwt.sign({ id: user.id }, process.env.TOKEN_SECRET, {
+    const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
       expiresIn: Number(process.env.TOKEN_EXPIRATION),
     });
     res.status(200).json({ token, user });
