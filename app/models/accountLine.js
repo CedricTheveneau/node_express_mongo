@@ -26,7 +26,9 @@ const accountLineSchema = new mongoose.Schema({
       message: "Amount must be more than 0",
     },
   },
-  date: { type: Date, required: [true, "The date field is required"] },
+  date: {
+    type: Date,
+  },
   method: {
     type: String,
     required: [true, "The method field is required"],
@@ -41,12 +43,23 @@ const accountLineSchema = new mongoose.Schema({
     ref: "Category",
     required: [true, "The category field is required"],
   },
-  lastUpdated: { type: Date, required: [true, "The date field is required"] },
+  lastUpdated: { type: Date },
   accountId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Account",
     required: [true, "The account field is required"],
   },
+});
+
+accountLineSchema.pre("save", function (next) {
+  this.date = Date.now();
+  this.lastUpdated = Date.now();
+  next();
+});
+
+accountLineSchema.pre("findOneAndUpdate", function (next) {
+  this.set({ lastUpdated: Date.now() });
+  next();
 });
 
 const AccountLine = mongoose.model("AccountLine", accountLineSchema);

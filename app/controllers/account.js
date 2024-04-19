@@ -39,7 +39,7 @@ exports.delete = async (req, res) => {
       userId: req.auth.userId,
     });
     if (!account) {
-      res.status(404).json({
+      return res.status(404).json({
         message: "Didn't find the account you were looking for.",
       });
     }
